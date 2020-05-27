@@ -195,14 +195,15 @@ def format_filename(filename, episode):
 
 def format_command(cmd, episode, file_format, path):
     from anime_downloader.config import Config
-    if not Config._CONFIG['dl']['aria2c_for_torrents'] and episode.url.startswith('magnet:?xt=urn:btih:'):
+    if not Config._CONFIG['dl']['aria2c_for_torrents'] and episode.url.startswith('magnet:?xt=urn:btih:') and cmd!="{qbittorrent}":
         return ['open',episode.url]
 
     cmd_dict = {
         '{aria2}': 'aria2c {stream_url} -x 12 -s 12 -j 12 -k 10M -o '
                    '{file_format}.mp4 --continue=true --dir={download_dir}'
                    ' --stream-piece-selector=inorder --min-split-size=5M --referer={referer} --check-certificate=false --user-agent={useragent}',
-        '{idm}'  : 'idman.exe /n /d {stream_url} /p {download_dir} /f {file_format}.mp4'
+        '{idm}'  : 'idman.exe /n /d {stream_url} /p {download_dir} /f {file_format}.mp4',
+        '{qbittorrent}' : 'qbittorrent {stream_url} --save-path={download_dir} --skip-dialog=true'
     }
 
 
